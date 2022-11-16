@@ -41,14 +41,23 @@ export default function NavBar() {
 							</Popover.Button>
 						</div>
 						<Popover.Group as="nav" className="hidden space-x-10 md:flex">
-							<a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
-								Mix
+							<a
+								href="/mix"
+								className="text-base font-medium text-gray-500 hover:text-gray-900"
+							>
+								mix
 							</a>
-							<a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
-								Play
+							<a
+								href="/play"
+								className="text-base font-medium text-gray-500 hover:text-gray-900"
+							>
+								play
 							</a>
-							<a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
-								Share
+							<a
+								href="/explore"
+								className="text-base font-medium text-gray-500 hover:text-gray-900"
+							>
+								explore
 							</a>
 						</Popover.Group>
 						<div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
@@ -74,23 +83,23 @@ export default function NavBar() {
 							<div className="space-y-6 py-6 px-5">
 								<div className="grid grid-cols-2 gap-y-4 gap-x-8">
 									<a
-										href="#"
+										href="/mix"
 										className="text-base font-medium text-gray-900 hover:text-gray-700"
 									>
-										Mix
+										mix
 									</a>
 
 									<a
-										href="#"
+										href="/play"
 										className="text-base font-medium text-gray-900 hover:text-gray-700"
 									>
-										Play
+										play
 									</a>
 									<a
-										href="#"
+										href="/explore"
 										className="text-base font-medium text-gray-900 hover:text-gray-700"
 									>
-										Share
+										explore
 									</a>
 								</div>
 								<div>

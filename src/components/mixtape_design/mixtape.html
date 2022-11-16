@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>NFT MixTape</title>
+		<meta name="description" content="Flashback track smack" />
+		<meta name="keywords" content="living like like is 1983" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			body {
+				background-color: #2bd1fc;
+			}
+			h1 {
+				background-color: #f3ea5f;
+				font-family: "Press Start 2P", cursive;
+				font-size: 40px;
+			}
+			h2 {
+				background-color: #ff3f3f;
+				font-family: "Press Start 2P", cursive;
+				font-size: 30px;
+			}
+			img {
+				background-color: #ff48c4;
+			}
+			#playList {
+				display: grid;
+				gap: 1px;
+				grid-template-columns: repeat(3, 1fr);
+			}
+		</style>
+		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@audius/sdk@latest/dist/sdk.min.js"></script>
+		<script>
+			let playing = false;
+			const trackIds = [
+				"y72vX",
+				"2l800",
+				"Q6a21",
+				"E7wE7",
+				"gz8El",
+				"EYj78",
+				"XjYPb",
+				"K7Nay",
+				"OGP0Q",
+			];
+			const terraId = "eYxAy";
+			const appName = "nftMixtape";
+			const audiusSdk = window.audiusSdk({
+				appName: "NFT Mixtape",
+			});
+
+			const audioObjects = [];
+			const fn = async () => {
+				for (let i = 0; i < trackIds.length; i++) {
+					const track = await audiusSdk.tracks.getTrack({
+						trackId: trackIds[i],
+					});
+					const url = await audiusSdk.tracks.streamTrack({
+						trackId: trackIds[i],
+					});
+					const audio = new Audio(url);
+					audioObjects.push(audio);
+					var elem = document.createElement("img");
+					elem.setAttribute("src", track.artwork["480x480"]);
+					elem.setAttribute("height", "250");
+					elem.setAttribute("width", "250");
+					elem.setAttribute("alt", "Flower");
+					document.getElementById("playList").appendChild(elem);
+					// <iframe src=https://audius.co/embed/track/XjYPb?flavor=card width="100%" height="480" allow="encrypted-media" style="border: none;"></iframe>
+				}
+			};
+			fn();
+
+			const playAll = async () => {
+				if (playing) {
+					for (let i = 0; i < audioObjects.length; i++) {
+						audioObjects[i].pause();
+					}
+					document.getElementById("playpause").innerHTML = "Play";
+					playing = false;
+					return;
+				}
+				document.getElementById("playpause").innerHTML = "Pause";
+				playing = true;
+
+				for (let i = 0; i < audioObjects.length; i++) {
+					console.log("playing track ", i);
+					audioObjects[i].play();
+					while (!audioObjects[i].ended) {
+						await new Promise((resolve) => setTimeout(resolve, 1000));
+					}
+				}
+				playing = false;
+			};
+		</script>
+	</head>
+	<body>
+		<div id="title">
+			<h1>NFT Playlist</h1>
+		</div>
+		<div id="action">
+			<h2><a href="#" id="playpause" onClick="playAll()">Play</a></h2>
+		</div>
+		<div id="playList"></div>
+	</body>
+</html>

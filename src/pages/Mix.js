@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TrackList from "../components/TrackList";
-import Playlist from "../components/Playlist";
+import Instructions from "../components/Instructions";
+import Mixtape from "../components/Mixtape";
 
 const Mix = () => {
 	const [tracks, setTracks] = useState([]);
@@ -63,9 +64,9 @@ const Mix = () => {
 						</div>
 					</div>
 				</div>
-				{playlistTracks.length > 0 && <Playlist playlistTracks={playlistTracks} />}
+				{playlistTracks.length > 0 && <Mixtape playlistTracks={playlistTracks} />}
 
-				<div className="">
+				<div className="px-4 max-w-full">
 					{tracks.length > 0 && (
 						<TrackList
 							tracks={tracks}
@@ -73,6 +74,7 @@ const Mix = () => {
 							setPlaylistTracks={setPlaylistTracks}
 						/>
 					)}
+					<Instructions />
 				</div>
 			</div>
 		</div>
