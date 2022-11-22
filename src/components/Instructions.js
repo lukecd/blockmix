@@ -3,10 +3,10 @@ import React from "react";
 const Instructions = () => {
 	return (
 		<div className="mt-8 mx-20 flex flex-col">
-			<div className="bg-primary text-text">
-				<span className="text-4xl font-press-start">Welcome to Blockmix.</span>
+			<div className="bg-primary text-header">
+				<span className="text-4xl font-press-start px-2 py-2">Welcome to Blockmix.</span>
 			</div>
-			<div className="bg-primary text-text">
+			<div className="bg-primary text-text px-5">
 				Sit down, relax and explore tunes from blockchains spread across the galaxy. Each search is
 				unique, every time you click a search term, you get a 42 random tunes in that category.
 				<br /> Like something? Make a playlist with it. Just like a lucky find in a dusty used

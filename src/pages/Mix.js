@@ -52,7 +52,7 @@ const Mix = () => {
 								<div className="px-1">
 									<button
 										type="button"
-										className="mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+										className="mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-text shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 										onClick={(e) => {
 											doSearch(query);
 										}}
@@ -74,7 +74,7 @@ const Mix = () => {
 							setPlaylistTracks={setPlaylistTracks}
 						/>
 					)}
-					<Instructions />
+					{tracks.length === 0 && <Instructions />}
 				</div>
 			</div>
 		</div>

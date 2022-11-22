@@ -10,44 +10,61 @@
 			href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
 			rel="stylesheet"
 		/>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
 		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
 			body {
-				background-color: #2bd1fc;
+				background-color: #82a8a1;
 			}
 			h1 {
-				background-color: #f3ea5f;
+				background-color: #82a8a1;
 				font-family: "Press Start 2P", cursive;
-				font-size: 40px;
+				font-size: 35px;
 			}
 			h2 {
-				background-color: #ff3f3f;
+				background-color: #2f8a97;
 				font-family: "Press Start 2P", cursive;
-				font-size: 30px;
+				font-size: 18px;
+			}
+			h3 {
+				background-color: #2f8a97;
+				font-family: "Roboto";
+				font-size: 15px;
 			}
 			img {
-				background-color: #ff48c4;
+				background-color: #0e2954;
+				margin-top: 5px;
+				margin-bottom: 2px;
+			}
+			#wrapper {
+				border: 5px solid #d83b25;
+				width: 300px;
+				margin: auto;
 			}
 			#playList {
 				display: grid;
-				gap: 1px;
-				grid-template-columns: repeat(3, 1fr);
+				grid-template-columns: 50% 50%;
+				display: none;
+			}
+			#title {
+				text-align: center;
+				display: flex;
+				flex-direction: column;
+				padding-top: 10px;
+			}
+			#action {
+				text-align: center;
 			}
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@audius/sdk@latest/dist/sdk.min.js"></script>
 		<script>
 			let playing = false;
-			const trackIds = [
-				"y72vX",
-				"2l800",
-				"Q6a21",
-				"E7wE7",
-				"gz8El",
-				"EYj78",
-				"XjYPb",
-				"K7Nay",
-				"OGP0Q",
-			];
+			const trackIds = ["QRRXG","YJBdr","70GEW","Zl3ja","JEy5d","GYQZb",]
 			const terraId = "eYxAy";
 			const appName = "nftMixtape";
 			const audiusSdk = window.audiusSdk({
@@ -57,18 +74,21 @@
 			const audioObjects = [];
 			const fn = async () => {
 				for (let i = 0; i < trackIds.length; i++) {
+					// track info for UI
 					const track = await audiusSdk.tracks.getTrack({
 						trackId: trackIds[i],
 					});
+					console.log(track);
+					// URL for streaming
 					const url = await audiusSdk.tracks.streamTrack({
 						trackId: trackIds[i],
 					});
 					const audio = new Audio(url);
 					audioObjects.push(audio);
 					var elem = document.createElement("img");
-					elem.setAttribute("src", track.artwork["480x480"]);
-					elem.setAttribute("height", "250");
-					elem.setAttribute("width", "250");
+					elem.setAttribute("src", track.artwork["150x150"]);
+					elem.setAttribute("height", "150");
+					elem.setAttribute("width", "150");
 					elem.setAttribute("alt", "Flower");
 					document.getElementById("playList").appendChild(elem);
 					// <iframe src=https://audius.co/embed/track/XjYPb?flavor=card width="100%" height="480" allow="encrypted-media" style="border: none;"></iframe>
@@ -81,11 +101,11 @@
 					for (let i = 0; i < audioObjects.length; i++) {
 						audioObjects[i].pause();
 					}
-					document.getElementById("playpause").innerHTML = "Play";
+					document.getElementById("playPause").innerHTML = "Play";
 					playing = false;
 					return;
 				}
-				document.getElementById("playpause").innerHTML = "Pause";
+				document.getElementById("playPause").innerHTML = "Pause";
 				playing = true;
 
 				for (let i = 0; i < audioObjects.length; i++) {
@@ -97,15 +117,34 @@
 				}
 				playing = false;
 			};
+
+			const showHide = () => {
+				if (playList.style.display === "none") {
+					playList.style.display = "block";
+					document.getElementById("showHide").innerHTML = "Hide Tracks";
+				} else {
+					playList.style.display = "none";
+					document.getElementById("showHide").innerHTML = "Show Tracks";
+				}
+			};
 		</script>
 	</head>
 	<body>
-		<div id="title">
-			<h1>NFT Playlist</h1>
+		<div id="wrapper">
+			<div id="title">
+				<h1>Blockmix</h1>
+				<h2>Groove And Move</h2>
+				<img src="https://arweave.net/GDBbF838cY9c6I-upRwbOgivFMVQy5np-mLw-ns7xmI" />
+			</div>
+			<div id="action">
+				<h3>
+					<a href="#" id="playPause" onClick="playAll()">Play</a> |
+					<a href="#" id="share" onClick="playAll()">Share</a> |
+					<a href="#" id="showHide" onClick="showHide()">Show Tracks</a>
+				</h3>
+				<h3></h3>
+			</div>
+			<div id="playList"></div>
 		</div>
-		<div id="action">
-			<h2><a href="#" id="playpause" onClick="playAll()">Play</a></h2>
-		</div>
-		<div id="playList"></div>
 	</body>
 </html>

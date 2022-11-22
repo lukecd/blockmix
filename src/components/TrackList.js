@@ -94,7 +94,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 											{activeAudio && activeAudioId == track.id && (
 												<a
 													href="#"
-													className="mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+													className="mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 													onClick={(e) => {
 														doPlay(track.id);
 													}}
@@ -105,7 +105,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 											{!activeAudio && (
 												<a
 													href="#"
-													className="mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+													className="mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 													onClick={(e) => {
 														doPlay(track.id);
 													}}
@@ -116,7 +116,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 
 											<a
 												href="#"
-												className="mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+												className="mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 												onClick={(e) => {
 													doAdd(
 														track.artwork["150x150"],
