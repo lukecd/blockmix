@@ -1,17 +1,102 @@
-import React, { useState } from "react";
-import { providers } from "ethers";
+import React, { useState, useEffect } from "react";
 import { WebBundlr } from "@bundlr-network/client";
-import BigNumber from "bignumber.js";
+import ABI from "../lens/abi.json";
+import {
+	client,
+	// challenge,
+	// authenticate,
+	// getDefaultProfile,
+	// signCreatePostTypedData,
+	// lensHub,
+	// splitSignature,
+	// validateMetadata,
+} from "../api";
+import { ethers } from "ethers";
+
+import { useBalance, useAccount, useContract, useContractEvent, useProvider, useSigner } from "wagmi";
 
 const Mixtape = ({ playlistTracks }) => {
+	// nader(5)
+	const [address, setAddress] = useState();
+	const [profileId, setProfileId] = useState("");
+	const [handle, setHandle] = useState("");
+	const [token, setToken] = useState("");
+	const [session, setSession] = useState(null);
+
+	const [arweaveURL, setArweaveURL] = useState(null);
 	const [playing, setPlaying] = useState(false);
 	const [playlistTitle, setPlaylistTitle] = useState("");
+	const rainbowKitProvider = useProvider();
+	const { data: signer, isError, isLoading } = useSigner();
+
+	// useEffect(() => {
+	// 	checkConnection();
+	// }, []);
+	// async function checkConnection() {
+	// 	const provider = new ethers.providers.Web3Provider(window.ethereum);
+	// 	const accounts = await provider.listAccounts();
+	// 	if (accounts.length) {
+	// 		setAddress(accounts[0]);
+	// 		const response = await client.query({
+	// 			query: getDefaultProfile,
+	// 			variables: { address: accounts[0] },
+	// 		});
+	// 		setProfileId(response.data.defaultProfile.id);
+	// 		setHandle(response.data.defaultProfile.handle);
+	// 	}
+	// }
+	// async function connect() {
+	// 	const account = await window.ethereum.send("eth_requestAccounts");
+	// 	if (account.result.length) {
+	// 		setAddress(account.result[0]);
+	// 		const response = await client.query({
+	// 			query: getDefaultProfile,
+	// 			//variables: { address: accounts[0] },
+	// 			variables: { address: account.result[0] },
+	// 		});
+	// 		setProfileId(response.data.defaultProfile.id);
+	// 		setHandle(response.data.defaultProfile.handle);
+	// 	}
+	// }
+
+	// async function login() {
+	// 	try {
+	// 		const challengeInfo = await client.query({
+	// 			query: challenge,
+	// 			variables: {
+	// 				address,
+	// 			},
+	// 		});
+	// 		const provider = new ethers.providers.Web3Provider(window.ethereum);
+	// 		const signer = provider.getSigner();
+	// 		const signature = await signer.signMessage(challengeInfo.data.challenge.text);
+	// 		const authData = await client.mutate({
+	// 			mutation: authenticate,
+	// 			variables: {
+	// 				address,
+	// 				signature,
+	// 			},
+	// 		});
+
+	// 		const {
+	// 			data: {
+	// 				authenticate: { accessToken },
+	// 			},
+	// 		} = authData;
+	// 		localStorage.setItem("lens-auth-token", accessToken);
+	// 		setToken(accessToken);
+	// 		setSession(authData.data.authenticate);
+	// 	} catch (err) {
+	// 		console.log("Error signing in: ", err);
+	// 	}
+	// }
 
 	// On saving to Bundlr, we take the mixtape template and inject the following values
 	// 1. Mixtape title
 	// 2. Audius IDs
 	// 3. Random tape image
 	const doSave = async () => {
+		// TODO Move the template to Arweave too
 		const templateURL = "http://localhost:3000/mixtape_design/mixtape_template.html";
 
 		// Create a string representing all track ids.
@@ -63,17 +148,12 @@ const Mixtape = ({ playlistTracks }) => {
 
 		console.log(templateDataText);
 
-		await window.ethereum.enable();
-		const provider = new providers.Web3Provider(window.ethereum);
-		await provider._ready();
-		console.log("provider=", provider);
-
-		//const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", provider);
-		const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", provider, {
+		rainbowKitProvider.getSigner = () => signer;
+		// const bundlr = new WebBundlr("https://node1.bundlr.network", "matic", rainbowKitProvider);
+		const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", rainbowKitProvider, {
 			providerUrl: "https://rpc-mumbai.matic.today",
 		});
 		await bundlr.ready();
-		console.log("bundlr=", bundlr);
 
 		// create a transaction with the merged template data
 		// also set the Content-type value so the browser knows how to render the page
@@ -98,6 +178,95 @@ const Mixtape = ({ playlistTracks }) => {
 		console.log("response=", response);
 
 		console.log(`Data uploaded ==> https://arweave.net/${response.id}`);
+		setArweaveURL("https://arweave.net/" + response.id);
+	};
+
+	//https://docs.lens.xyz/docs/functions
+	const doShareOld = async () => {
+		// const provider = new ethers.providers.Web3Provider(window.ethereum);
+		// const signer = provider.getSigner();
+		// const contract = new ethers.Contract(lensHubProxyContractAddress, ABI, signer);
+		// console.log("contract=", contract);
+		// try {
+		// 	const postData = {
+		// 		profileId: 42221, // hardcode me for now
+		// 		arweaveURL,
+		// 		collectModule: "0x23b9467334bEb345aAa6fd1545538F3d54436e96", // free to collect
+		// 		collectModuleInitData: ethers.utils.defaultAbiCoder.encode(["bool"], [true]),
+		// 		referenceModule: "0x0000000000000000000000000000000000000000", // anyone can reference
+		// 		referenceModuleInitData: [],
+		// 	};
+		// 	console.log("Posting ", postData);
+		// 	const tx = await contract.post(postData);
+		// 	console.log("posted mixtape successfully");
+		// } catch (e) {
+		// 	console.log("error on share ", e);
+		// }
+		// const { accessToken } = await refreshAuthToken();
+		// const createPostRequest = {
+		// 	profileId: 42221, // hardcode me for now
+		// 	arweaveURL,
+		// 	collectModule: {
+		// 		freeCollectModule: { followerOnly: true },
+		// 	},
+		// 	referenceModule: {
+		// 		followerOnlyReferenceModule: false,
+		// 	},
+		// };
+		// const signedResult = await signCreatePostTypedData(createPostRequest, accessToken);
+		// const typedData = signedResult.result.typedData;
+		// const { v, r, s } = splitSignature(signedResult.signature);
+		// const tx = await contract.postWithSig({
+		// 	profileId: typedData.value.profileId,
+		// 	contentURI: typedData.value.contentURI,
+		// 	collectModule: typedData.value.collectModule,
+		// 	collectModuleInitData: typedData.value.collectModuleInitData,
+		// 	referenceModule: typedData.value.referenceModule,
+		// 	referenceModuleInitData: typedData.value.referenceModuleInitData,
+		// 	sig: {
+		// 		v,
+		// 		r,
+		// 		s,
+		// 		deadline: typedData.value.deadline,
+		// 	},
+		// });
+	};
+
+	const doShare = async () => {
+		// const createPostRequest = {
+		// 	profileId,
+		// 	//contentURI: "ipfs://" + ipfsData.path,
+		// 	contentURI: "https://arweave.net/i4iQhgpzcYaC53OyaRBZtlBzgwGJjTdqtFOPFN6HAVI",
+		// 	collectModule: {
+		// 		freeCollectModule: { followerOnly: true },
+		// 	},
+		// 	referenceModule: {
+		// 		followerOnlyReferenceModule: false,
+		// 	},
+		// };
+		// console.log("createPostRequest=", createPostRequest);
+		// try {
+		// 	const signedResult = await signCreatePostTypedData(createPostRequest, token);
+		// 	const typedData = signedResult.result.typedData;
+		// 	const { v, r, s } = splitSignature(signedResult.signature);
+		// 	const tx = await lensHub.postWithSig({
+		// 		profileId: typedData.value.profileId,
+		// 		contentURI: typedData.value.contentURI,
+		// 		collectModule: typedData.value.collectModule,
+		// 		collectModuleInitData: typedData.value.collectModuleInitData,
+		// 		referenceModule: typedData.value.referenceModule,
+		// 		referenceModuleInitData: typedData.value.referenceModuleInitData,
+		// 		sig: {
+		// 			v,
+		// 			r,
+		// 			s,
+		// 			deadline: typedData.value.deadline,
+		// 		},
+		// 	});
+		// 	console.log("successfully created post: tx hash", tx.hash);
+		// } catch (err) {
+		// 	console.log("error posting publication: ", err);
+		// }
 	};
 
 	const doPlay = async () => {
@@ -185,15 +354,28 @@ const Mixtape = ({ playlistTracks }) => {
 						play now
 					</button>
 				)}
-				<button
-					type="button"
-					className="mt-3 bg-secondary px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-					onClick={(e) => {
-						doSave();
-					}}
-				>
-					save to bundlr
-				</button>
+				{!arweaveURL && (
+					<button
+						type="button"
+						className="mt-3 bg-secondary px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+						onClick={(e) => {
+							doSave();
+						}}
+					>
+						save to bundlr
+					</button>
+				)}
+				{arweaveURL && (
+					<button
+						type="button"
+						className="mt-3 bg-secondary px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+						onClick={(e) => {
+							doShare();
+						}}
+					>
+						share to lens
+					</button>
+				)}
 			</div>
 		</div>
 	);

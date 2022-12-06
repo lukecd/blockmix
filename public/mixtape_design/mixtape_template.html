@@ -11,6 +11,13 @@
 			rel="stylesheet"
 		/>
 		<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+			integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+			crossorigin="anonymous"
+		/>
+
 		<style>
 			* {
 				margin: 0;
@@ -35,37 +42,128 @@
 				font-family: "Roboto";
 				font-size: 15px;
 			}
+			h4 {
+				font-family: "Roboto";
+				font-size: 9px;
+				padding-right: 5px;
+			}
 			img {
-				background-color: #0e2954;
-				margin-top: 5px;
 				margin-bottom: 2px;
 			}
+			#branding {
+				text-align: right;
+				background-color: #2f8a97;
+			}
 			#wrapper {
-				border: 5px solid #d83b25;
 				width: 300px;
 				margin: auto;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
 			}
 			#playList {
-				display: grid;
-				grid-template-columns: 50% 50%;
 				display: none;
+				flex-wrap: wrap;
+				gap: 2px;
+				padding-top: 5px;
+				margin-left: 5px;
 			}
 			#title {
 				text-align: center;
 				display: flex;
 				flex-direction: column;
 				padding-top: 10px;
+				padding-right: 2px;
 			}
 			#action {
 				text-align: center;
+			}
+			/* VIDEO OVERLAY FROM: https://douglasgreen.com/create-a-responsive-video-play-button-overlay/ */
+			/* Just a parent container for the videos */
+			#videos {
+				margin: 10px auto;
+			}
+			/* Individual video container */
+			#video-wrap {
+				--play-icon: "\f04b";
+				--pause-icon: "\f04c";
+				--playPause-icon: "\f04b";
+			}
+			#video-wrap {
+				position: relative;
+				max-width: 700px;
+				width: 100%;
+				margin-bottom: 10px;
+			}
+			#video-wrap #placeholder {
+				max-width: 700px;
+				width: 100%;
+			}
+			#video-wrap #play-btn {
+				position: absolute;
+				max-width: 700px;
+				width: 60px;
+				height: 60px;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -80%);
+				line-height: 1; /* needed if using Bootstrap */
+				text-align: center;
+				color: #2f8a97;
+				transition: color, background-color 0.2s ease;
+			}
+			#video-wrap #play-btn:hover,
+			#video-wrap #play-btn:focus {
+				color: #ff3f3f;
+				cursor: pointer;
+			}
+			#play-btn::after {
+				/*
+				Font Awesome recommends these styles
+				https://fontawesome.com/how-to-use/on-the-web/advanced/css-pseudo-elements
+				*/
+				display: inline-block;
+				font-style: normal;
+				font-variant: normal;
+				text-rendering: auto;
+				-webkit-font-smoothing: antialiased;
+				/*
+				Define the font family, weight, and icon
+				*/
+				font-family: "Font Awesome 5 Free";
+				font-weight: 900;
+				font-size: 40px;
+				content: var(--playPause-icon);
+				/* positioning tweaks */
+				padding-top: 20px;
+				padding-left: 10px;
 			}
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@audius/sdk@latest/dist/sdk.min.js"></script>
 		<script>
 			let playing = false;
+			let showTracks = false;
+			const queryString = window.location.search;
+			const urlParams = new URLSearchParams(queryString);
+			const showTracksQueryParam = urlParams.get("showTracks");
+			if (showTracksQueryParam && showTracksQueryParam.indexOf("true") != -1) showTracks = true;
+			console.log("showTracks=", showTracks);
 			const trackIds = ||TRACKIDS||
-			const terraId = "eYxAy";
+			// const trackIds = [
+			// 	"y72vX",
+			// 	"2l800",
+			// 	"Q6a21",
+			// 	"E7wE7",
+			// 	"gz8El",
+			// 	"EYj78",
+			// 	"XjYPb",
+			// 	"K7Nay",
+			// 	"gz8El",
+			// 	"EYj78",
+			// 	"XjYPb",
+			// 	"K7Nay",
+			// ];
 			const appName = "nftMixtape";
 			const audiusSdk = window.audiusSdk({
 				appName: "NFT Mixtape",
@@ -78,7 +176,7 @@
 					const track = await audiusSdk.tracks.getTrack({
 						trackId: trackIds[i],
 					});
-					console.log(track);
+					//console.log(track);
 					// URL for streaming
 					const url = await audiusSdk.tracks.streamTrack({
 						trackId: trackIds[i],
@@ -86,26 +184,37 @@
 					const audio = new Audio(url);
 					audioObjects.push(audio);
 					var elem = document.createElement("img");
+					elem.setAttribute("id", "playlistItem");
 					elem.setAttribute("src", track.artwork["150x150"]);
-					elem.setAttribute("height", "150");
-					elem.setAttribute("width", "150");
+					elem.setAttribute("height", "100");
+					elem.setAttribute("width", "100");
 					elem.setAttribute("alt", "Flower");
 					document.getElementById("playList").appendChild(elem);
-					// <iframe src=https://audius.co/embed/track/XjYPb?flavor=card width="100%" height="480" allow="encrypted-media" style="border: none;"></iframe>
 				}
 			};
 			fn();
 
 			const playAll = async () => {
 				if (playing) {
+					// currently playing, so let's pause
 					for (let i = 0; i < audioObjects.length; i++) {
 						audioObjects[i].pause();
 					}
-					document.getElementById("playPause").innerHTML = "Play";
+					//document.getElementById("playPause").innerHTML = "Play";
+
+					const playIcon = getComputedStyle(
+						document.getElementById("video-wrap"),
+					).getPropertyValue("--play-icon");
+					document.getElementById("video-wrap").style.setProperty("--playPause-icon", playIcon);
 					playing = false;
 					return;
 				}
-				document.getElementById("playPause").innerHTML = "Pause";
+				// we're not playing, so change icon to pause and start playing
+				const pauseIcon = getComputedStyle(document.getElementById("video-wrap")).getPropertyValue(
+					"--pause-icon",
+				);
+				document.getElementById("video-wrap").style.setProperty("--playPause-icon", pauseIcon);
+				//document.getElementById("playPause").innerHTML = "Pause";
 				playing = true;
 
 				for (let i = 0; i < audioObjects.length; i++) {
@@ -117,34 +226,37 @@
 				}
 				playing = false;
 			};
-
-			const showHide = () => {
-				if (playList.style.display === "none") {
-					playList.style.display = "block";
-					document.getElementById("showHide").innerHTML = "Hide Tracks";
-				} else {
-					playList.style.display = "none";
-					document.getElementById("showHide").innerHTML = "Show Tracks";
-				}
-			};
 		</script>
 	</head>
 	<body>
 		<div id="wrapper">
-			<div id="title">
-				<h1>Blockmix</h1>
-				<h2>||TITLE||</h2>
-				<img src="||IMAGE||" />
-			</div>
-			<div id="action">
-				<h3>
-					<a href="#" id="playPause" onClick="playAll()">Play</a> |
-					<a href="#" id="share" onClick="playAll()">Share</a> |
-					<a href="#" id="showHide" onClick="showHide()">Show Tracks</a>
-				</h3>
-				<h3></h3>
+			<div>
+				<div id="title">
+					<h2>||TITLE||</h2>
+					<div id="branding"><h4>Blockmix</h4></div>
+				</div>
+				<div id="videos">
+					<div id="video-wrap">
+						<a href="#" id="playPause" onClick="playAll()">
+							<div id="play-btn"></div>
+							<img src="||IMAGE||" />
+							<!-- <img src="https://arweave.net/GDBbF838cY9c6I-upRwbOgivFMVQy5np-mLw-ns7xmI" /> -->
+						</a>
+					</div>
+				</div>
 			</div>
 			<div id="playList"></div>
 		</div>
+
+		<script>
+			if (showTracks) {
+				console.log(document.getElementById("playList"));
+				document.getElementById("playList").style.display = "block";
+				document.getElementById("wrapper").style.width = "900px";
+			} else {
+				document.getElementById("playList").style.display = "none";
+				document.getElementById("wrapper").style.width = "300px";
+			}
+		</script>
 	</body>
 </html>

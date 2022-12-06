@@ -10,10 +10,8 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
-const { chains, provider } = configureChains(
-	[chain.polygonMumbai],
-	[alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()],
-);
+const { provider, chains, webSocketProvider } = configureChains([chain.polygonMumbai], [publicProvider()]);
+
 const { connectors } = getDefaultWallets({
 	appName: "Blockmix",
 	chains,

@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@apollo/client": "^3.7.1",
 		"@bundlr-network/client": "^0.9.0",
 		"@headlessui/react": "^1.7.3",
 		"@heroicons/react": "^2.0.13",
@@ -13,6 +14,7 @@
 		"browserify-zlib": "^0.2.0",
 		"ethers": "^5.7.2",
 		"graphql": "^16.6.0",
+		"omit-deep": "^0.3.0",
 		"path": "^0.12.7",
 		"path-browserify": "^1.0.1",
 		"react": "^18.2.0",
