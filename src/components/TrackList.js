@@ -4,6 +4,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 	const [activeAudio, setActiveAudio] = useState();
 	const [activeAudioId, setActiveAudioId] = useState();
 
+	// called when the user clicks "Add"
 	const doAdd = (artwork, artist, track, id) => {
 		const newTrack = {
 			artwork: artwork,
@@ -14,6 +15,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 		setPlaylistTracks([...playlistTracks, newTrack]);
 	};
 
+	// called when the user clicks "Play"
 	const doPlay = async (trackId) => {
 		if (activeAudio) {
 			activeAudio.pause();
@@ -35,30 +37,30 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 	return (
 		<div className="mt-8 flex flex-col mx-20">
 			<div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-				<div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-					<div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+				<div className="inline-block min-w-full py-2 align-middle">
+					<div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5">
 						<table className="min-w-full divide-y divide-secondary">
 							<thead className="bg-secondary">
 								<tr>
 									<th
 										scope="col"
-										className="py-3.5 pl-4 pr-3 text-left font-semibold text-gray-900 sm:pl-6"
+										className="font-mono py-3.5 pl-4 pr-3 text-left font-semibold text-gray-900 sm:pl-6"
 									></th>
 									<th
 										scope="col"
-										className="px-3 py-3.5 text-left font-semibold text-gray-900"
+										className="font-mono px-3 py-3.5 text-left font-semibold text-gray-900"
 									>
 										Artist
 									</th>
 									<th
 										scope="col"
-										className="px-3 py-3.5 text-left font-semibold text-gray-900"
+										className="font-mono px-3 py-3.5 text-left font-semibold text-gray-900"
 									>
 										Title
 									</th>
 									<th
 										scope="col"
-										className="px-3 py-3.5 text-left font-semibold text-gray-900"
+										className="font-mono px-3 py-3.5 text-left font-semibold text-gray-900"
 									>
 										Genre
 									</th>
@@ -80,21 +82,23 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 											</div>
 										</td>
 										<td className="whitespace-wrap px-3 py-4 text-gray-500">
-											<div className="text-gray-900">{track.user.name}</div>
+											<div className="font-mono text-sm text-gray-900">
+												{track.user.name}
+											</div>
 										</td>
 										<td className="whitespace-wrap px-3 py-4 text-gray-500">
-											<span className="whitespace-wrap px-3 py-4 text-white">
+											<span className="font-mono text-sm whitespace-wrap px-3 py-4 text-white">
 												{track.title}
 											</span>
 										</td>
-										<td className="whitespace-wrap px-3 py-4 text-white">
+										<td className="font-mono text-sm whitespace-wrap px-3 py-4 text-white">
 											{track.genre}
 										</td>
 										<td className="relative whitespace-wrap py-4 pl-3 pr-4 text-right font-medium sm:pr-6">
 											{activeAudio && activeAudioId == track.id && (
 												<a
 													href="#"
-													className="mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+													className="font-mono text-xs mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 													onClick={(e) => {
 														doPlay(track.id);
 													}}
@@ -105,7 +109,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 											{!activeAudio && (
 												<a
 													href="#"
-													className="mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+													className="font-mono text-sm mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 													onClick={(e) => {
 														doPlay(track.id);
 													}}
@@ -116,7 +120,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 
 											<a
 												href="#"
-												className="mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+												className="font-mono text-sm mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 												onClick={(e) => {
 													doAdd(
 														track.artwork["150x150"],

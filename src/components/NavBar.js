@@ -27,7 +27,7 @@ export default function NavBar() {
 		<div className="fixed w-full z-10">
 			<Popover className=" bg-primary">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6">
-					<div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
+					<div className="flex items-center py-6 justify-start space-x-10">
 						<div className="flex justify-start lg:w-0 lg:flex-1">
 							<a href="#">
 								<img className="h-8 w-auto sm:h-10" src={logo} alt="" />
@@ -43,23 +43,18 @@ export default function NavBar() {
 						<Popover.Group as="nav" className="hidden space-x-10 md:flex">
 							<a
 								href="/mix"
-								className="text-base font-medium text-gray-500 hover:bg-highlight"
+								className="font-mono text-base font-medium text-gray-500 hover:bg-highlight"
 							>
 								mix
 							</a>
 							<a
 								href="/play"
-								className="text-base font-medium text-gray-500 hover:bg-highlight"
+								className="font-mono text-base font-medium text-gray-500 hover:bg-highlight"
 							>
 								play
 							</a>
-							<a
-								href="/explore"
-								className="text-base font-medium text-gray-500 hover:bg-highlight"
-							>
-								explore
-							</a>
 						</Popover.Group>
+
 						<div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
 							<ConnectButton />
 						</div>
@@ -94,12 +89,6 @@ export default function NavBar() {
 										className="text-base font-medium text-gray-900 hover:bg-highlight"
 									>
 										play
-									</a>
-									<a
-										href="/explore"
-										className="text-base font-medium text-gray-900 hover:bg-highlight"
-									>
-										explore
 									</a>
 								</div>
 								<div>

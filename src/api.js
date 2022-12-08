@@ -4,8 +4,9 @@ import { setContext } from "@apollo/client/link/context";
 import omitDeep from "omit-deep";
 import LENS_HUB_ABI from "./ABI.json";
 
-//export const LENS_HUB_CONTRACT = "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"; // MATIC
+// export const LENS_HUB_CONTRACT = "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d";// MAINNET
 export const LENS_HUB_CONTRACT = "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82"; // MUMBAI
+
 export const lensHub = new ethers.Contract(LENS_HUB_CONTRACT, LENS_HUB_ABI, getSigner());
 
 const API_URL = "https://api.lens.dev";
@@ -147,8 +148,19 @@ export const splitSignature = (signature) => {
 };
 
 export const signCreatePostTypedData = async (request, token) => {
+	console.log("signCreatePostTypedData");
 	const result = await createPostTypedDataMutation(request, token);
+	console.log("signCreatePostTypedData result=", result);
+
 	const typedData = result.typedData;
+	console.log("signCreatePostTypedData typedData=", typedData);
+	// HACK HACK HACK TODO FIX
+	typedData.domain.chainId = 80001;
+	typedData.domain.verifyingContract = LENS_HUB_CONTRACT;
+	console.log("signCreatePostTypedData typedData2=", typedData);
+
 	const signature = await signedTypeData(typedData.domain, typedData.types, typedData.value);
+	console.log("signCreatePostTypedData signature=", signature);
+
 	return { result, signature };
 };

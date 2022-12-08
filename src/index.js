@@ -11,6 +11,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 const { provider, chains, webSocketProvider } = configureChains([chain.polygonMumbai], [publicProvider()]);
+// const { provider, chains, webSocketProvider } = configureChains([chain.polygon], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
 	appName: "Blockmix",
