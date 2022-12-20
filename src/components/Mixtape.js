@@ -10,12 +10,17 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 	const [playlistTitle, setPlaylistTitle] = useState("");
 	const rainbowKitProvider = useProvider();
 	const { data: signer, isError, isLoading } = useSigner();
+	const [message, setMessage] = useState("");
 
 	// On saving to Bundlr, we take the mixtape template and inject the following values
 	// 1. Mixtape title
 	// 2. Audius IDs
 	// 3. Random tape image
 	const doSave = async () => {
+		if (!playlistTitle) {
+			setMessage("How about a name first?");
+			return;
+		}
 		// TODO Move the template to Arweave too
 		const templateURL = "/mixtape_design/mixtape_template.html";
 
@@ -115,18 +120,11 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 
 		setPlaying(true);
 
-		// connect to audiusSDK
-		const audiusSdk = window.audiusSdk({
-			appName: "blockmix",
-		});
-
 		// create an array of Audio objects we can play
 		const audioObjects = [];
 		for (let i = 0; i < playlistTracks.length; i++) {
-			const url = await audiusSdk.tracks.streamTrack({
-				trackId: playlistTracks[i].id,
-			});
-			const audio = new Audio(url);
+			console.log("creatnig audio object=", playlistTracks[i].playUrl);
+			const audio = new Audio(playlistTracks[i].playUrl);
 			audioObjects.push(audio);
 		}
 		// store in state to make pausing easy
@@ -215,6 +213,7 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 					</button>
 				)}
 			</div>
+			<p className="font-bold text-white mr-1">{message}</p>
 		</div>
 	);
 };
