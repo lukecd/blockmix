@@ -40,7 +40,7 @@ const Play = () => {
 									Show Tracks
 								</a>
 							</span>
-							<iframe src={mixtape} width={310} height={270}></iframe>
+							<iframe src={mixtape} width={310} height={220}></iframe>
 						</div>
 					))}
 				</div>

@@ -25,20 +25,20 @@
 				border: 0;
 			}
 			body {
-				background-color: #82a8a1;
+				background-color: #f461c2;
 			}
 			h1 {
-				background-color: #82a8a1;
+				background-color: #35c3ff;
 				font-family: "Press Start 2P", cursive;
 				font-size: 35px;
 			}
 			h2 {
-				background-color: #2f8a97;
+				background-color: #ffef33;
 				font-family: "Press Start 2P", cursive;
 				font-size: 18px;
 			}
 			h3 {
-				background-color: #2f8a97;
+				background-color: #00fdd6;
 				font-family: "Roboto";
 				font-size: 15px;
 			}
@@ -51,14 +51,20 @@
 				margin-bottom: 2px;
 			}
 			#branding {
+				width: 300px;
 				text-align: right;
-				background-color: #2f8a97;
+				background-color: #35c3ff;
 			}
 			#wrapper {
 				width: 300px;
 				margin: auto;
 				display: flex;
 				flex-direction: row;
+				justify-content: center;
+			}
+			#innerWrapper {
+				display: flex;
+				flex-direction: column;
 				justify-content: center;
 			}
 			#playList {
@@ -110,7 +116,7 @@
 				transform: translate(-50%, -80%);
 				line-height: 1; /* needed if using Bootstrap */
 				text-align: center;
-				color: #2f8a97;
+				color: #35c3ff;
 				transition: color, background-color 0.2s ease;
 			}
 			#video-wrap #play-btn:hover,
@@ -150,80 +156,88 @@
 			const showTracksQueryParam = urlParams.get("showTracks");
 			if (showTracksQueryParam && showTracksQueryParam.indexOf("true") != -1) showTracks = true;
 			console.log("showTracks=", showTracks);
-			//const trackIds = ||TRACKIDS||
-			const trackIds = [
-				{
-					artwork:
-						"https://creatornode3.audius.co/content/QmYAvzm7F4K47qbit9GpyFgwGQ97ZiYUq8LTUuXxTJriZ4/150x150.jpg",
-					artist: "IamJory",
-					track: "hyperpop",
-					id: "B5Rpp",
-					playUrl: "https://discoveryprovider3.audius.co/v1/tracks/B5Rpp/stream",
-					previewURL: "https://audius.co/joryblaney/hyperpop",
-				},
-				{
-					artwork:
-						"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665761422/editionRenders/1cc852706063d40363e0b2cc0981419d.jpg",
-					artist: "El Lissitzky",
-					track: "El Lissitzky 130th anniversary tribute collection #10",
-					id: "12",
-					playUrl: "https://storage.googleapis.com/art-creation-test/audio/080e014641.mp3",
-				},
-				{
-					artwork:
-						"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665745093/editionRenders/2cb6bac4a32138eaa23e67bf745702b1.jpg",
-					artist: "El Lissitzky",
-					track: "El Lissitzky 130th anniversary tribute collection #14",
-					id: "16",
-					playUrl: "https://storage.googleapis.com/art-creation-test/audio/cc6014e99e.mp3",
-				},
-				{
-					artwork:
-						"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665724299/editionRenders/2a3c5082ebd52535bfeeee9056b2b4c3.jpg",
-					artist: "El Lissitzky",
-					track: "El Lissitzky 130th anniversary tribute collection #4",
-					id: "6",
-					playUrl: "https://storage.googleapis.com/art-creation-test/audio/b2462da398.mp3",
-				},
-				{
-					artwork:
-						"https://creatornode3.audius.co/content/QmWGD7sEgs2QvwJDF8iN3Hu27D3Rfdz6rH2XNUxxx2fxsx/150x150.jpg",
-					artist: "Jaye De Luminist",
-					track: "GET IT & GO (FRY FACE HYPERPOP REMIX)",
-					id: "0ArPk",
-					playUrl: "https://discoveryprovider3.audius.co/v1/tracks/0ArPk/stream",
-					previewURL: "https://audius.co/JayeDeLuminist/get-it-go-fry-face-hyperpop-remix",
-				},
-			];
-			const appName = "nftMixtape";
-			const audiusSdk = window.audiusSdk({
-				appName: "NFT Mixtape",
-			});
+			const tracks = ||TRACKS||
+			// const tracks = [
+			// 	{
+			// 		artwork:
+			// 			"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665802895/editionRenders/90cb867bab3864dd944ce995b5f0cf6b.jpg",
+			// 		artist: "ellissitzky",
+			// 		track: "El Lissitzky 130th anniversary tribute collection #3",
+			// 		id: "5",
+			// 		playUrl: "https://storage.googleapis.com/art-creation-test/audio/a56a7071f2.mp3",
+			// 		previewURL:
+			// 			"https://async.market/blueprints/6348325cb48b4e5af85b5d79/editions/0xbc402bed62c90afd0e104be32bdee9447b5ccd0d-5",
+			// 	},
+			// 	{
+			// 		artwork:
+			// 			"https://creatornode2.audius.co/content/QmZGMBxs9FE66VChMCMvfxqJTUpVdb1p31CZYSGuyNLxm9/150x150.jpg",
+			// 		artist: "Poley Records",
+			// 		track: "Tropical House - Dj G Taylor Feat Steve Jonas (Work in Progress)",
+			// 		id: "pyggG",
+			// 		playUrl: "https://blockchange-audius-discovery-03.bdnodes.net/v1/tracks/pyggG/stream",
+			// 		previewURL:
+			// 			"https://audius.co/poleyrecords/tropical-house-dj-g-taylor-feat-steve-jonas-work-in-progress",
+			// 	},
+			// 	{
+			// 		artwork:
+			// 			"https://audius-content-13.figment.io/content/QmRHqDXUt6tKWfCPzYCYhuW2cYrQ6a3Ht7jiNutppQeszF/150x150.jpg",
+			// 		artist: "Mr Cool",
+			// 		track: "tropical house sux",
+			// 		id: "Qb9mV",
+			// 		playUrl: "https://blockchange-audius-discovery-03.bdnodes.net/v1/tracks/Qb9mV/stream",
+			// 		previewURL: "https://audius.co/MrCool/tropical-house-sux-227309",
+			// 	},
+			// 	{
+			// 		artwork:
+			// 			"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665745093/editionRenders/2cb6bac4a32138eaa23e67bf745702b1.jpg",
+			// 		artist: "El Lissitzky",
+			// 		track: "El Lissitzky 130th anniversary tribute collection #14",
+			// 		id: "16",
+			// 		playUrl: "https://storage.googleapis.com/art-creation-test/audio/cc6014e99e.mp3",
+			// 		previewURL:
+			// 			"https://async.market/blueprints/6348325cb48b4e5af85b5d79/editions/0xbc402bed62c90afd0e104be32bdee9447b5ccd0d-16",
+			// 	},
+			// 	{
+			// 		artwork:
+			// 			"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665745377/editionRenders/e42efbc53da1a19c30df2bb25f37b19b.jpg",
+			// 		artist: "ellissitzky",
+			// 		track: "El Lissitzky 130th anniversary tribute collection #2",
+			// 		id: "4",
+			// 		playUrl: "https://storage.googleapis.com/art-creation-test/audio/78019eecf9.mp3",
+			// 		previewURL:
+			// 			"https://async.market/blueprints/6348325cb48b4e5af85b5d79/editions/0xbc402bed62c90afd0e104be32bdee9447b5ccd0d-4",
+			// 	},
+			// 	{
+			// 		artwork:
+			// 			"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665727838/editionRenders/8d7e16c018d7b7364ba1e8b6e29d905e.jpg",
+			// 		artist: "El Lissitzky",
+			// 		track: "El Lissitzky 130th anniversary tribute collection #12",
+			// 		id: "14",
+			// 		playUrl: "https://storage.googleapis.com/art-creation-test/audio/f3184f9e4a.mp3",
+			// 		previewURL:
+			// 			"https://async.market/blueprints/6348325cb48b4e5af85b5d79/editions/0xbc402bed62c90afd0e104be32bdee9447b5ccd0d-14",
+			// 	},
+			// 	{
+			// 		artwork:
+			// 			"https://creatornode2.audius.co/content/QmYj6FH4m9hxyXQTpw6gGJXTVym12xNRfRnrqd6xrpR73g/150x150.jpg",
+			// 		artist: "DJ S Tonish",
+			// 		track: "Relaxing Tropical Deep House Music ",
+			// 		id: "Q6K19",
+			// 		playUrl: "https://blockchange-audius-discovery-03.bdnodes.net/v1/tracks/Q6K19/stream",
+			// 		previewURL: "https://audius.co/djstonish/relaxing-tropical-deep-house-music",
+			// 	},
+			// 	{
+			// 		artwork:
+			// 			"https://audius-content-13.cultur3stake.com/content/QmRcy1Jc4tqiwAXhTz3q7Ue4kQAM9TvGLYzmFv32rg4Qo7/150x150.jpg",
+			// 		artist: "Laconic Spartan",
+			// 		track: "Paradise - A Tropical House Mix",
+			// 		id: "LjPYV",
+			// 		playUrl: "https://blockchange-audius-discovery-03.bdnodes.net/v1/tracks/LjPYV/stream",
+			// 		previewURL: "https://audius.co/laconic/paradise-a-tropical-house-mix-50833",
+			// 	},
+			// ];
 
 			const audioObjects = [];
-			const fn = async () => {
-				for (let i = 0; i < trackIds.length; i++) {
-					// track info for UI
-					const track = await audiusSdk.tracks.getTrack({
-						trackId: trackIds[i],
-					});
-					//console.log(track);
-					// URL for streaming
-					const url = await audiusSdk.tracks.streamTrack({
-						trackId: trackIds[i],
-					});
-					const audio = new Audio(url);
-					audioObjects.push(audio);
-					var elem = document.createElement("img");
-					elem.setAttribute("id", "playlistItem");
-					elem.setAttribute("src", track.artwork["150x150"]);
-					elem.setAttribute("height", "100");
-					elem.setAttribute("width", "100");
-					elem.setAttribute("alt", "Flower");
-					document.getElementById("playList").appendChild(elem);
-				}
-			};
-			fn();
 
 			const playAll = async () => {
 				if (playing) {
@@ -249,7 +263,6 @@
 				playing = true;
 
 				for (let i = 0; i < audioObjects.length; i++) {
-					console.log("playing track ", i);
 					audioObjects[i].play();
 					while (!audioObjects[i].ended) {
 						await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -261,7 +274,7 @@
 	</head>
 	<body>
 		<div id="wrapper">
-			<div>
+			<div id="innerWrapper">
 				<div id="title">
 					<h2>||TITLE||</h2>
 					<!-- <h2>Weird Words Wild Worlds</h2> -->
@@ -272,7 +285,7 @@
 						<a href="#" id="playPause" onClick="playAll()">
 							<div id="play-btn"></div>
 							<img src="||IMAGE||" />
-							<!-- <img src="https://arweave.net/GDBbF838cY9c6I-upRwbOgivFMVQy5np-mLw-ns7xmI" /> -->
+							<!-- <img src="https://arweave.net/Gbg6ST1ntBfYXUhIsjkqlrKDd8PEh7rwh3Y45VGE5Zw" /> -->
 						</a>
 					</div>
 				</div>
@@ -281,8 +294,23 @@
 		</div>
 
 		<script>
+			for (let i = 0; i < tracks.length; i++) {
+				const audio = new Audio(tracks[i].playUrl);
+				audioObjects.push(audio);
+
+				var img = document.createElement("img");
+				img.setAttribute("id", "playlistItem");
+				img.setAttribute("src", tracks[i].artwork);
+				img.setAttribute("height", "100");
+				img.setAttribute("width", "100");
+				img.setAttribute("alt", tracks[i].track);
+				var link = document.createElement("a");
+				link.setAttribute("href", tracks[i].previewURL);
+				link.target = "_blank";
+				link.appendChild(img);
+				document.getElementById("playList").appendChild(link);
+			}
 			if (showTracks) {
-				console.log(document.getElementById("playList"));
 				document.getElementById("playList").style.display = "block";
 				document.getElementById("wrapper").style.width = "900px";
 			} else {

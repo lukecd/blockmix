@@ -88,7 +88,7 @@ const How = () => {
 						curious to see someone expand on it and pull in data from hundreds of contracts.
 						<ul className="list-disc ml-5 mt-2">
 							<li>
-								A tutorial on how I build this can be found{" "}
+								A tutorial on how I built this can be found{" "}
 								<a href="TODO" target="_blank" className="underline decoration-primary">
 									here
 								</a>

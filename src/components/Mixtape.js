@@ -16,20 +16,8 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 	// 2. Audius IDs
 	// 3. Random tape image
 	const doSave = async () => {
-		if (true) {
-			console.log(JSON.stringify(playlistTracks));
-			return;
-		}
 		// TODO Move the template to Arweave too
 		const templateURL = "/mixtape_design/mixtape_template.html";
-
-		// Create a string representing all track ids.
-		let trackIds = "[";
-		for (let i = 0; i < playlistTracks.length; i++) {
-			trackIds += '"' + playlistTracks[i].id + '"';
-			trackIds += ",";
-		}
-		trackIds += "]";
 
 		// 20 different images to show at the top of the playlist
 		const tapeImages = [
@@ -73,11 +61,11 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 			tapeURL +
 			templateDataText.substring(templateDataText.indexOf("||IMAGE||") + 9);
 
-		// 3. Change ||TRACKIDS|| to
+		// 3. Change ||TRACKS|| to
 		templateDataText =
-			templateDataText.substring(0, templateDataText.indexOf("||TRACKIDS||")) +
-			trackIds +
-			templateDataText.substring(templateDataText.indexOf("||TRACKIDS||") + 12);
+			templateDataText.substring(0, templateDataText.indexOf("||TRACKS||")) +
+			JSON.stringify(playlistTracks) +
+			templateDataText.substring(templateDataText.indexOf("||TRACKS||") + 10);
 
 		rainbowKitProvider.getSigner = () => signer;
 		// const bundlr = new WebBundlr("https://node1.bundlr.network", "matic", rainbowKitProvider);

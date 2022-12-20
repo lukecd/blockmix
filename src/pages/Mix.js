@@ -134,7 +134,7 @@ const Mix = () => {
 				track: nftsForContract.nfts[i].title,
 				id: nftsForContract.nfts[i].tokenId,
 				playUrl: nftsForContract.nfts[i].rawMetadata.animation_url,
-				previewURL: nftsForContract.nfts[i].external_url,
+				previewURL: nftsForContract.nfts[i].rawMetadata.external_url,
 			};
 			tracks.push(newTrack);
 		}
@@ -157,12 +157,12 @@ const Mix = () => {
 					<span className="text-4xl font-press-start"></span>
 				</div>
 				{tracks.length === 0 && (
-					<div className="mt-10">
+					<div className="mt-5">
 						<SplashScreen />
 					</div>
 				)}
 
-				<div className="border bg-secondary border-primary border-8 mx-20 mt-10">
+				<div className="border bg-secondary border-primary border-8 mx-20 mt-5">
 					<div>
 						<div className="flex flex-row items-center pr-10">
 							{searchQueries.map((query, id) => (
@@ -181,6 +181,7 @@ const Mix = () => {
 						</div>
 					</div>
 				</div>
+
 				{playlistTracks.length > 0 && (
 					<Mixtape
 						playlistTracks={playlistTracks}
@@ -196,11 +197,6 @@ const Mix = () => {
 							playlistTracks={playlistTracks}
 							setPlaylistTracks={setPlaylistTracks}
 						/>
-					)}
-					{tracks.length === 0 && (
-						<div className="text-4xl font-press-start text-right px-10 py-10">
-							Pick some tunes, yo!
-						</div>
 					)}
 				</div>
 			</div>
