@@ -29,7 +29,7 @@ export default function NavBar() {
 				<div className="mx-auto max-w-7xl px-4 sm:px-6">
 					<div className="flex items-center py-6 justify-start space-x-10">
 						<div className="flex justify-start lg:w-0 lg:flex-1">
-							<a href="#">
+							<a href="/">
 								<img className="h-8 w-auto sm:h-10" src={logo} alt="" />
 							</a>
 							<span className="text-2xl font-press-start pl-5 pt-1">blockmix</span>
@@ -52,6 +52,12 @@ export default function NavBar() {
 								className="font-mono text-base font-medium text-gray-500 hover:bg-highlight"
 							>
 								play
+							</a>
+							<a
+								href="/how"
+								className="font-mono text-base font-medium text-gray-500 hover:bg-highlight"
+							>
+								how's this work?
 							</a>
 						</Popover.Group>
 

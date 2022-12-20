@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { WebBundlr } from "@bundlr-network/client";
-
 import { ethers } from "ethers";
-
 import { useBalance, useProvider, useSigner } from "wagmi";
 
 const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
@@ -18,6 +16,10 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 	// 2. Audius IDs
 	// 3. Random tape image
 	const doSave = async () => {
+		if (true) {
+			console.log(JSON.stringify(playlistTracks));
+			return;
+		}
 		// TODO Move the template to Arweave too
 		const templateURL = "/mixtape_design/mixtape_template.html";
 
@@ -29,21 +31,30 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 		}
 		trackIds += "]";
 
-		// 12 different images to show at the top of the playlist
+		// 20 different images to show at the top of the playlist
 		const tapeImages = [
-			"4ukeDloi9VugwE2bR4w6L-XbTKPIltcWuaJwGBMJf2w",
-			"pYX6w8mGvfHcO2ArFtpCmU0diq4LQEQFktG79YYtGXs",
-			"4QkDwX8JUfTF-ZBLJwcpxcUwwn1pjItKhg38RjXKh38",
-			"4ahfII1eLtJodm5VVzOYSGJPTQN4VJo-OrF0PggYOIY",
-			"NIqMk23cZwbxkd4OZOqbOtm__qUhofZnVyIoNXhLnCg",
-			"cRgPGTJC2TcpKWh3auoGIqqKJXTm2Yly3XBUtneueH0",
-			"Bn2aK8CQ86QDcEu98QT0qTc6atEbZKfSVu1df04C86U",
-			"WckZ1rgENky0qyHctgh6Ip-w8Ja4gUHbwDulOTdWW6A",
-			"GDBbF838cY9c6I-upRwbOgivFMVQy5np-mLw-ns7xmI",
-			"yxGrWUjU1H8iyyEO6meD47FvTmcjX28EPv6S2fTYywM",
-			"zgMV-doPmW5qQNOmwbkzdlIUr_kPixZ8GoWpxvfn_K0",
-			"1IK5aZCBIwYyx3juI9YvV9MyZUE2r_k0LRHbujTHrqk",
+			"Gbg6ST1ntBfYXUhIsjkqlrKDd8PEh7rwh3Y45VGE5Zw",
+			"Z1QxcVwk-mqQiphuA3O0en6sAbk5zrCUny4nniOZujU",
+			"ZRTbKEuUfV7IUy9mZCuMXjsuJ0kwnvqeEFtE_AOr5j0",
+			"mgHl_zr0POZ9dsmzhP75-tU-VTOZavCLywYaHiDv3xw",
+			"yPL1WRjU1jWRIi-jMVthn9LBE9JYT6xzVKl4s6PLYNo",
+			"r1YeNoi5edRbUdw5r4y7EfJcJhctjrxEGBFZOjO8Yts",
+			"UuSavdxKkQd_yzfoaUETvRULGKAGulmwykvxUK9oXAM",
+			"N1hNZi5acUPV4luRzIhtnrLSpjOTO_fewPD2WoSkibs",
+			"UEJMXYmBEkpiM7VLq71dGcIk1hEhSBKmBjYmOzE6PXA",
+			"X1oyZpsslvGjKLjWb5HWU6JIGu3g7cnFiZxr6eCY9Go",
+			"2BRqnvme7rskRh1hh8SE5cxV7skW_WbazyvNI4MUqjI",
+			"2ALajE7LbvLy5VoxRpxDrEOlzyJd97zuEAl_DWfFOWQ",
+			"zgsaseaxqN7UdKcujjQY4f1-9ml2iM0MBYcQLt4FHGU",
+			"SnFB_aZNpSa6_hmsLYCxpL9wFdaKl3qkt4JJTHQng-k",
+			"Gm3oWzFxiVtB2Ls2noT6q_TbgQQx_PwYNBjUJV0tJXg",
+			"kxX9_3P5jokehNSDrGuB5btLPMKt_vB_yUijeYQL-Ro",
+			"45X6FpmwsSVG_ul4TsPBnIkQh7aM2y1CuTNdF0aiaRE",
+			"UVUvrWtxtcjjX4NnbjWvnL7sz06ar3y3aquqDpYxBG4",
+			"bRsly1adnoqj9-5bPznXIfF_M7QcatuuKPCdl9zScq4",
+			"vxyIsS8VWVwWlhKpOx3EBhvT04bAftC_-GmNtsihSkI",
 		];
+
 		// pick a random image
 		const tapeURL = "https://arweave.net/" + tapeImages[Math.floor(Math.random() * tapeImages.length)];
 

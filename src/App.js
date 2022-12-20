@@ -2,12 +2,12 @@ import NavBar from "./components/NavBar";
 import Mix from "./pages/Mix";
 import Play from "./pages/Play";
 import Explore from "./pages/Explore";
-
+import How from "./pages/How";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
 	return (
-		<div className="App">
+		<div className="App" id="app">
 			<NavBar />
 
 			<BrowserRouter>
@@ -16,6 +16,7 @@ function App() {
 					<Route path="/mix" element={<Mix />} />
 					<Route path="/play" element={<Play />} />
 					<Route path="/explore" element={<Explore />} />
+					<Route path="/how" element={<How />} />
 				</Routes>
 			</BrowserRouter>
 		</div>

@@ -8,14 +8,17 @@ module.exports = {
 			},
 			fontFamily: {
 				"press-start": ['"Press Start 2P"', "cursive"],
-				roboto: ["Roboto"],
 			},
 		},
+		animation: {
+			// Bounces 5 times 1s equals 5 seconds
+			"bounce-short": "bounce 2.5s ease-in-out 1",
+		},
 		colors: {
-			background: "#0E2954",
-			primary: "#82A8A1",
-			secondary: "#2F8A97",
-			highlight: "#D83B25",
+			background: "#F461C2",
+			primary: "#35C3FF",
+			secondary: "#FFEF33",
+			highlight: "#00FDD6",
 			header: "#D83B25",
 			text: "gray-900",
 		},

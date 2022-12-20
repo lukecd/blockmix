@@ -150,21 +150,51 @@
 			const showTracksQueryParam = urlParams.get("showTracks");
 			if (showTracksQueryParam && showTracksQueryParam.indexOf("true") != -1) showTracks = true;
 			console.log("showTracks=", showTracks);
-			const trackIds = ||TRACKIDS||
-			// const trackIds = [
-			// 	"y72vX",
-			// 	"2l800",
-			// 	"Q6a21",
-			// 	"E7wE7",
-			// 	"gz8El",
-			// 	"EYj78",
-			// 	"XjYPb",
-			// 	"K7Nay",
-			// 	"gz8El",
-			// 	"EYj78",
-			// 	"XjYPb",
-			// 	"K7Nay",
-			// ];
+			//const trackIds = ||TRACKIDS||
+			const trackIds = [
+				{
+					artwork:
+						"https://creatornode3.audius.co/content/QmYAvzm7F4K47qbit9GpyFgwGQ97ZiYUq8LTUuXxTJriZ4/150x150.jpg",
+					artist: "IamJory",
+					track: "hyperpop",
+					id: "B5Rpp",
+					playUrl: "https://discoveryprovider3.audius.co/v1/tracks/B5Rpp/stream",
+					previewURL: "https://audius.co/joryblaney/hyperpop",
+				},
+				{
+					artwork:
+						"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665761422/editionRenders/1cc852706063d40363e0b2cc0981419d.jpg",
+					artist: "El Lissitzky",
+					track: "El Lissitzky 130th anniversary tribute collection #10",
+					id: "12",
+					playUrl: "https://storage.googleapis.com/art-creation-test/audio/080e014641.mp3",
+				},
+				{
+					artwork:
+						"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665745093/editionRenders/2cb6bac4a32138eaa23e67bf745702b1.jpg",
+					artist: "El Lissitzky",
+					track: "El Lissitzky 130th anniversary tribute collection #14",
+					id: "16",
+					playUrl: "https://storage.googleapis.com/art-creation-test/audio/cc6014e99e.mp3",
+				},
+				{
+					artwork:
+						"https://asynchronous-art-inc-res.cloudinary.com/image/upload/v1665724299/editionRenders/2a3c5082ebd52535bfeeee9056b2b4c3.jpg",
+					artist: "El Lissitzky",
+					track: "El Lissitzky 130th anniversary tribute collection #4",
+					id: "6",
+					playUrl: "https://storage.googleapis.com/art-creation-test/audio/b2462da398.mp3",
+				},
+				{
+					artwork:
+						"https://creatornode3.audius.co/content/QmWGD7sEgs2QvwJDF8iN3Hu27D3Rfdz6rH2XNUxxx2fxsx/150x150.jpg",
+					artist: "Jaye De Luminist",
+					track: "GET IT & GO (FRY FACE HYPERPOP REMIX)",
+					id: "0ArPk",
+					playUrl: "https://discoveryprovider3.audius.co/v1/tracks/0ArPk/stream",
+					previewURL: "https://audius.co/JayeDeLuminist/get-it-go-fry-face-hyperpop-remix",
+				},
+			];
 			const appName = "nftMixtape";
 			const audiusSdk = window.audiusSdk({
 				appName: "NFT Mixtape",

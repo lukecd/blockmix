@@ -2,36 +2,25 @@ import React, { useState } from "react";
 
 const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 	const [activeAudio, setActiveAudio] = useState();
-	const [activeAudioId, setActiveAudioId] = useState();
+	const [activeAudioURL, setActiveAudioURL] = useState();
 
 	// called when the user clicks "Add"
-	const doAdd = (artwork, artist, track, id) => {
-		const newTrack = {
-			artwork: artwork,
-			artist: artist,
-			track: track,
-			id: id,
-		};
-		setPlaylistTracks([...playlistTracks, newTrack]);
+	const doAdd = (track) => {
+		setPlaylistTracks([...playlistTracks, track]);
 	};
 
 	// called when the user clicks "Play"
-	const doPlay = async (trackId) => {
+	const doPlay = async (url) => {
 		if (activeAudio) {
 			activeAudio.pause();
 			setActiveAudio(null);
 			return;
 		}
-		const audiusSdk = window.audiusSdk({
-			appName: "blockmix",
-		});
-		const url = await audiusSdk.tracks.streamTrack({
-			trackId: trackId,
-		});
+
 		const audio = new Audio(url);
 		audio.play();
 		setActiveAudio(audio);
-		setActiveAudioId(trackId);
+		setActiveAudioURL(url);
 	};
 
 	return (
@@ -58,12 +47,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 									>
 										Title
 									</th>
-									<th
-										scope="col"
-										className="font-mono px-3 py-3.5 text-left font-semibold text-gray-900"
-									>
-										Genre
-									</th>
+
 									<th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6"></th>
 								</tr>
 							</thead>
@@ -75,7 +59,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 												<div className="h-10 w-10 flex-shrink-0">
 													<img
 														className="h-10 w-10 rounded-full"
-														src={track.artwork["150x150"]}
+														src={track.artwork}
 														alt=""
 													/>
 												</div>
@@ -83,24 +67,22 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 										</td>
 										<td className="whitespace-wrap px-3 py-4 text-gray-500">
 											<div className="font-mono text-sm text-gray-900">
-												{track.user.name}
+												{track.artist}
 											</div>
 										</td>
 										<td className="whitespace-wrap px-3 py-4 text-gray-500">
 											<span className="font-mono text-sm whitespace-wrap px-3 py-4 text-white">
-												{track.title}
+												{track.track}
 											</span>
 										</td>
-										<td className="font-mono text-sm whitespace-wrap px-3 py-4 text-white">
-											{track.genre}
-										</td>
+
 										<td className="relative whitespace-wrap py-4 pl-3 pr-4 text-right font-medium sm:pr-6">
-											{activeAudio && activeAudioId == track.id && (
+											{activeAudio && activeAudioURL == track.playUrl && (
 												<a
 													href="#"
 													className="font-mono text-xs mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 													onClick={(e) => {
-														doPlay(track.id);
+														doPlay(track.playUrl);
 													}}
 												>
 													Pause
@@ -111,7 +93,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 													href="#"
 													className="font-mono text-sm mt-3 mb-3 mr-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 													onClick={(e) => {
-														doPlay(track.id);
+														doPlay(track.playUrl);
 													}}
 												>
 													Play
@@ -122,12 +104,7 @@ const TrackList = ({ tracks, playlistTracks, setPlaylistTracks }) => {
 												href="#"
 												className="font-mono text-sm mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 												onClick={(e) => {
-													doAdd(
-														track.artwork["150x150"],
-														track.user.name,
-														track.title,
-														track.id,
-													);
+													doAdd(track);
 												}}
 											>
 												Add
