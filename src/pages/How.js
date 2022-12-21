@@ -40,7 +40,7 @@ const How = () => {
 							className="underline decoration-primary"
 						>
 							Audius API
-						</a>
+						</a>{" "}
 						to do a genre search, then I use the{" "}
 						<a
 							href="https://www.alchemy.com/nft-api"

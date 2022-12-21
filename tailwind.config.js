@@ -10,10 +10,6 @@ module.exports = {
 				"press-start": ['"Press Start 2P"', "cursive"],
 			},
 		},
-		animation: {
-			// Bounces 5 times 1s equals 5 seconds
-			"bounce-short": "bounce 2.5s ease-in-out 1",
-		},
 		colors: {
 			background: "#F461C2",
 			primary: "#35C3FF",
