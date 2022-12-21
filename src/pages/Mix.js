@@ -4,11 +4,13 @@ import Instructions from "../components/Instructions";
 import SplashScreen from "../components/SplashScreen";
 import Mixtape from "../components/Mixtape";
 import { Network, Alchemy } from "alchemy-sdk";
+import SearchQueries from "../components/SearchQueries";
+// import Web3 from "web3";
+import { sdk } from "@audius/sdk";
 
 const Mix = () => {
 	const [tracks, setTracks] = useState([]);
 	const [playlistTracks, setPlaylistTracks] = useState([]);
-	const [searchQueries, setSearchQueries] = useState([]);
 	const [mixtapeURLs, setMixtapeURLs] = useState([]);
 	const ASYNC_MUSIC_CONTRACT = "0xbc402bed62c90afd0e104be32bdee9447b5ccd0d";
 
@@ -28,51 +30,12 @@ const Mix = () => {
 			console.log("No stored mixtapes");
 			setMixtapeURLs([]);
 		}
-		// shuffle the queries to give our UI some randomness
-		shuffleQueries();
 	}, []);
 
 	const storePlaylistURL = (newURL) => {
-		console.log("storing playlist url=", newURL);
 		setMixtapeURLs([...mixtapeURLs, newURL]);
 		// a new URL has been added. store the whole array in local storage.
 		localStorage.setItem("mixtape-urls", [...mixtapeURLs, newURL]);
-	};
-
-	const shuffleQueries = () => {
-		const baseQueries = [
-			"house",
-			"ambient",
-			"pop",
-			"folk",
-			"disco",
-			"jazz",
-			"hip hop",
-			"trap",
-			"experimental",
-			"lofi",
-			"metal",
-			"electronic",
-			"punk",
-			"world",
-			"classical",
-			"country",
-			"latin",
-			"hyperpop",
-			"house",
-			"tropical house",
-			"moombahton",
-			"trending",
-		];
-		/* Randomize array in-place using Durstenfeld shuffle algorithm (not my code:)) */
-		// randomize the list and then only show the first 12
-		for (var i = baseQueries.length - 1; i > 0; i--) {
-			var j = Math.floor(Math.random() * (i + 1));
-			var temp = baseQueries[i];
-			baseQueries[i] = baseQueries[j];
-			baseQueries[j] = temp;
-		}
-		setSearchQueries(baseQueries.slice(0, 12));
 	};
 
 	const getValueForTraitType = (traits, searchKey) => {
@@ -83,15 +46,17 @@ const Mix = () => {
 		return "";
 	};
 
-	const doSearch = async (searchType) => {
-		setTracks([]);
-		let tracks = [];
-
-		// first search audius
+	/**
+	 * Searches Audius using Audius API and returns maxTracks.
+	 * There is no guarantee that subsequent calls will return the same dataset
+	 * I've intentionally coded in a bunch of randomness.
+	 * @param {*} tracks Array to hold the found tracks
+	 * @param {*} maxTracks Max number of tracks to return
+	 */
+	const doSearchAudius = async (tracks, searchType, maxTracks) => {
 		let audiusTracks;
-		const audiusSdk = window.audiusSdk({
-			appName: "blockmix",
-		});
+
+		const audiusSdk = sdk({ appName: "Blockmix" });
 		if (searchType == "trending") {
 			audiusTracks = await audiusSdk.tracks.getTrendingTracks();
 		} else {
@@ -99,7 +64,6 @@ const Mix = () => {
 				query: searchType,
 			});
 		}
-
 		// then convert the audius data into our cross platform data
 		for (let i = 0; i < audiusTracks.length; i++) {
 			const newTrack = {
@@ -114,7 +78,16 @@ const Mix = () => {
 			};
 			tracks.push(newTrack);
 		}
+	};
 
+	/**
+	 * Searches ASYNC_MUSIC_CONTRACT using Alchmey NFT API and returns maxTracks.
+	 * There is no guarantee that subsequent calls will return the same dataset
+	 * I've intentionally coded in a bunch of randomness.
+	 * @param {*} tracks Array to hold the found tracks
+	 * @param {*} maxTracks Max number of tracks to return
+	 */
+	const doSearchAsyncMusic = async (tracks, maxTracks) => {
 		// now search ASYNC_MUSIC_CONTRACT
 		const nftQueryOptions = {
 			contractAddress: ASYNC_MUSIC_CONTRACT,
@@ -123,9 +96,11 @@ const Mix = () => {
 		};
 
 		const nftsForContract = await alchemy.nft.getNftsForContract(ASYNC_MUSIC_CONTRACT, {
+			startToken: 50,
 			limit: 16,
 		});
 		console.log("from alchemy got=>", nftsForContract.nfts.length);
+		console.log("number 0=", nftsForContract.nfts[0].title);
 		for (let i = 0; i < 16; i++) {
 			//for (let i = 0; i < nftsForContract.nfts.length; i++) {
 			const newTrack = {
@@ -138,8 +113,16 @@ const Mix = () => {
 			};
 			tracks.push(newTrack);
 		}
+	};
 
-		// finally randomize the track list
+	const doSearch = async (searchType) => {
+		setTracks([]);
+		let tracks = [];
+		const maxTracks = 15;
+		await doSearchAudius(tracks, searchType, maxTracks);
+		await doSearchAsyncMusic(tracks, maxTracks);
+
+		// now randomize the track list
 		for (var i = tracks.length - 1; i > 0; i--) {
 			var j = Math.floor(Math.random() * (i + 1));
 			var temp = tracks[i];
@@ -162,25 +145,7 @@ const Mix = () => {
 					</div>
 				)}
 
-				<div className="border bg-secondary border-primary border-8 mx-20 mt-5">
-					<div>
-						<div className="flex flex-row items-center pr-10">
-							{searchQueries.map((query, id) => (
-								<div className="px-1" key={id}>
-									<button
-										type="button"
-										className="font-mono mt-3 mb-3 rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-text shadow-sm hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-										onClick={(e) => {
-											doSearch(query);
-										}}
-									>
-										{query}
-									</button>
-								</div>
-							))}
-						</div>
-					</div>
-				</div>
+				<SearchQueries doSearch={doSearch} />
 
 				{playlistTracks.length > 0 && (
 					<Mixtape

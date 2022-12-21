@@ -14,7 +14,7 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 
 	// On saving to Bundlr, we take the mixtape template and inject the following values
 	// 1. Mixtape title
-	// 2. Audius IDs
+	// 2. JSON object showing audio data
 	// 3. Random tape image
 	const doSave = async () => {
 		if (!playlistTitle) {
