@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import TrackList from "../components/TrackList";
-import Instructions from "../components/Instructions";
 import SplashScreen from "../components/SplashScreen";
 import Mixtape from "../components/Mixtape";
 import { Network, Alchemy } from "alchemy-sdk";

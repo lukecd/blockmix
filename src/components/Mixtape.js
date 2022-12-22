@@ -43,11 +43,12 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 			setMessage("How about a name first?");
 			return;
 		}
-		// TODO Move the template to Arweave too
-		//const templateURL = "/mixtape_design/mixtape_template.html";
+		// Template URL for the file stored on Arweave
+		// If you uploaded your own template, change this URL.
 		const templateURL = "https://arweave.net/lsjOqRmeBq0nP62WlJt3I6K_yD0CiM9-N8TB1Hfh31g";
 
 		// 20 different images to show at the top of the playlist
+		// If you uploaded your own images to Bundlr, change these IDs
 		const tapeImages = [
 			"Gbg6ST1ntBfYXUhIsjkqlrKDd8PEh7rwh3Y45VGE5Zw",
 			"Z1QxcVwk-mqQiphuA3O0en6sAbk5zrCUny4nniOZujU",
@@ -74,6 +75,7 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 		// pick a random image
 		const tapeURL = "https://arweave.net/" + tapeImages[Math.floor(Math.random() * tapeImages.length)];
 
+		// grab the template data
 		const templateDataFull = await fetch(templateURL);
 		let templateDataText = await templateDataFull.text();
 		let templateDataMerged = "";
@@ -89,18 +91,18 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 			tapeURL +
 			templateDataText.substring(templateDataText.indexOf("||IMAGE||") + 9);
 
-		// 3. Change ||TRACKS|| to
+		// 3. Change ||TRACKS|| to the stringified value of our JSON array
 		templateDataText =
 			templateDataText.substring(0, templateDataText.indexOf("||TRACKS||")) +
 			JSON.stringify(playlistTracks) +
 			templateDataText.substring(templateDataText.indexOf("||TRACKS||") + 10);
 
+		// use function injection to make the RainbowKit provider work with Bundlr
 		rainbowKitProvider.getSigner = () => signer;
 		// const bundlr = new WebBundlr("https://node1.bundlr.network", "matic", rainbowKitProvider);
 		const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", rainbowKitProvider, {
 			providerUrl: "https://matic-mumbai.chainstacklabs.com",
 		});
-
 		await bundlr.ready();
 
 		// create a transaction with the merged template data
@@ -109,8 +111,11 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 			tags: [{ name: "Content-type", value: "text/html" }],
 		});
 
+		// lazy fund the upload, only paying for the amount of data we need
 		const cost = await bundlr.getPrice(tx.size);
 		const balance = await bundlr.getLoadedBalance();
+
+		// if necessary, fund the upload
 		if (cost.isGreaterThan(balance)) {
 			const fundAmountConverted = cost.minus(balance);
 			console.log("funding ", fundAmountConverted.toString());
@@ -119,6 +124,8 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 		await tx.sign();
 
 		const response = await tx.upload();
+
+		// print the playlist URL to console for reference
 		console.log(`Data uploaded ==> https://arweave.net/${response.id}`);
 
 		// store the playlist url locally
@@ -128,6 +135,11 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 		window.location.href = "/play";
 	};
 
+	/**
+	 * Called when the user clicks Play at the mixtape level.
+	 * Iterates though the array of tracks, playing each one.
+	 * If already playing, pauses play.
+	 */
 	const doPlay = async () => {
 		// if we're already playing, just pause and return
 		if (playing) {

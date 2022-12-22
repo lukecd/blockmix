@@ -3,9 +3,6 @@ module.exports = {
 
 	theme: {
 		extend: {
-			backgroundImage: {
-				tapes: "url('./images/tapes-bg.jpg')",
-			},
 			fontFamily: {
 				"press-start": ['"Press Start 2P"', "cursive"],
 			},

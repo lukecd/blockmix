@@ -1,5 +1,4 @@
 import React from "react";
-import Instructions from "../components/Instructions";
 import glasses from "../assets/images/3d-glasses.png";
 import sneakers from "../assets/images/sneakers.png";
 import tv from "../assets/images/tv.png";
@@ -89,7 +88,11 @@ const How = () => {
 						<ul className="list-disc ml-5 mt-2">
 							<li>
 								A tutorial on how I built this can be found{" "}
-								<a href="TODO" target="_blank" className="underline decoration-primary">
+								<a
+									href="https://docs.bundlr.network/docs/tutorials/mix-tape-dapp#mixtapejs"
+									target="_blank"
+									className="underline decoration-primary"
+								>
 									here
 								</a>
 								.{" "}
