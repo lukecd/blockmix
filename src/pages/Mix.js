@@ -5,39 +5,26 @@ import SplashScreen from "../components/SplashScreen";
 import Mixtape from "../components/Mixtape";
 import { Network, Alchemy } from "alchemy-sdk";
 import SearchQueries from "../components/SearchQueries";
-// import Web3 from "web3";
 import { sdk } from "@audius/sdk";
 
 const Mix = () => {
 	const [tracks, setTracks] = useState([]);
 	const [playlistTracks, setPlaylistTracks] = useState([]);
-	const [mixtapeURLs, setMixtapeURLs] = useState([]);
+
 	const ASYNC_MUSIC_CONTRACT = "0xbc402bed62c90afd0e104be32bdee9447b5ccd0d";
 
 	const alchemySettings = {
 		apiKey: "qrnzDRutOpKRpuEC7GDiinrMzc2EcHDI", // Replace with your Alchemy API Key.
-		network: Network.ETH_MAINNET, // Replace with your network.
+		network: Network.ETH_MAINNET,
 	};
 	const alchemy = new Alchemy(alchemySettings);
 
-	useEffect(() => {
-		// read out a local copy of our mixtape urls store in state
-		const localStorageURLs = localStorage.getItem("mixtape-urls");
-		if (localStorageURLs) {
-			console.log(localStorageURLs.split(","));
-			setMixtapeURLs(localStorageURLs.split(","));
-		} else {
-			console.log("No stored mixtapes");
-			setMixtapeURLs([]);
-		}
-	}, []);
-
-	const storePlaylistURL = (newURL) => {
-		setMixtapeURLs([...mixtapeURLs, newURL]);
-		// a new URL has been added. store the whole array in local storage.
-		localStorage.setItem("mixtape-urls", [...mixtapeURLs, newURL]);
-	};
-
+	/**
+	 * Helper function to search NFT traits
+	 * @param {*} traits The list of traits to search
+	 * @param {*} searchKey The search term to look for
+	 * @returns
+	 */
 	const getValueForTraitType = (traits, searchKey) => {
 		for (let i = 0; i < traits.length; i++) {
 			if (traits[i].trait_type === searchKey) return traits[i].value;
@@ -53,7 +40,8 @@ const Mix = () => {
 	 * @param {*} tracks Array to hold the found tracks
 	 * @param {*} maxTracks Max number of tracks to return
 	 */
-	const doSearchAudius = async (tracks, searchType, maxTracks) => {
+	const doSearchAudius = async (searchType, maxTracks) => {
+		let tracks = [];
 		let audiusTracks;
 
 		const audiusSdk = sdk({ appName: "Blockmix" });
@@ -78,6 +66,13 @@ const Mix = () => {
 			};
 			tracks.push(newTrack);
 		}
+
+		// now randomally delete items from the array until the length is maxTracks
+		while (tracks.length > maxTracks) {
+			const randIndex = Math.floor(Math.random() * tracks.length);
+			tracks.splice(randIndex, 1);
+		}
+		return tracks;
 	};
 
 	/**
@@ -87,22 +82,14 @@ const Mix = () => {
 	 * @param {*} tracks Array to hold the found tracks
 	 * @param {*} maxTracks Max number of tracks to return
 	 */
-	const doSearchAsyncMusic = async (tracks, maxTracks) => {
-		// now search ASYNC_MUSIC_CONTRACT
-		const nftQueryOptions = {
-			contractAddress: ASYNC_MUSIC_CONTRACT,
-			startToken: 10,
-			limit: 16,
-		};
+	const doSearchAsyncMusic = async (maxTracks) => {
+		let tracks = [];
 
-		const nftsForContract = await alchemy.nft.getNftsForContract(ASYNC_MUSIC_CONTRACT, {
-			startToken: 50,
-			limit: 16,
-		});
-		console.log("from alchemy got=>", nftsForContract.nfts.length);
-		console.log("number 0=", nftsForContract.nfts[0].title);
-		for (let i = 0; i < 16; i++) {
-			//for (let i = 0; i < nftsForContract.nfts.length; i++) {
+		// query the contract for the first 100 NFTs
+		const nftsForContract = await alchemy.nft.getNftsForContract(ASYNC_MUSIC_CONTRACT);
+
+		// iterate over the list and put data into our JSON format
+		for (let i = 0; i < nftsForContract.nfts.length; i++) {
 			const newTrack = {
 				artwork: nftsForContract.nfts[i].rawMetadata.image,
 				artist: getValueForTraitType(nftsForContract.nfts[i].rawMetadata.attributes, "Artist"),
@@ -113,14 +100,26 @@ const Mix = () => {
 			};
 			tracks.push(newTrack);
 		}
+
+		// now randomally delete items from the array until the length is maxTracks
+		while (tracks.length > maxTracks) {
+			const randIndex = Math.floor(Math.random() * tracks.length);
+			tracks.splice(randIndex, 1);
+		}
+		return tracks;
 	};
 
+	/**
+	 * Called when the user clicks a search term.
+	 * @param {*} searchType The search option (genre selection)
+	 */
 	const doSearch = async (searchType) => {
 		setTracks([]);
 		let tracks = [];
-		const maxTracks = 15;
-		await doSearchAudius(tracks, searchType, maxTracks);
-		await doSearchAsyncMusic(tracks, maxTracks);
+		const maxTracks = 15; // limit number of tracks per data source
+		const audiusTracks = await doSearchAudius(searchType, maxTracks);
+		const asyncTracks = await doSearchAsyncMusic(maxTracks);
+		tracks = audiusTracks.concat(asyncTracks);
 
 		// now randomize the track list
 		for (var i = tracks.length - 1; i > 0; i--) {
@@ -148,11 +147,7 @@ const Mix = () => {
 				<SearchQueries doSearch={doSearch} />
 
 				{playlistTracks.length > 0 && (
-					<Mixtape
-						playlistTracks={playlistTracks}
-						setPlaylistTracks={setPlaylistTracks}
-						storePlaylistURL={storePlaylistURL}
-					/>
+					<Mixtape playlistTracks={playlistTracks} setPlaylistTracks={setPlaylistTracks} />
 				)}
 
 				<div className="px-4 max-w-full">

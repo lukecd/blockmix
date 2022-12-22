@@ -1,26 +1,8 @@
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
-import {
-	ArrowPathIcon,
-	Bars3Icon,
-	BookmarkSquareIcon,
-	CalendarIcon,
-	ChartBarIcon,
-	CursorArrowRaysIcon,
-	LifebuoyIcon,
-	PhoneIcon,
-	PlayIcon,
-	ShieldCheckIcon,
-	Squares2X2Icon,
-	XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import logo from "../assets/images/cassette-tape-256.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-
-function classNames(...classes) {
-	return classes.filter(Boolean).join(" ");
-}
 
 export default function NavBar() {
 	return (
@@ -95,6 +77,12 @@ export default function NavBar() {
 										className="text-base font-medium text-gray-900 hover:bg-highlight"
 									>
 										play
+									</a>
+									<a
+										href="/how"
+										className="font-mono text-base font-medium text-gray-500 hover:bg-highlight"
+									>
+										how's this work?
 									</a>
 								</div>
 								<div>

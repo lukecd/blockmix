@@ -28,7 +28,6 @@ const SearchQueries = ({ doSearch }) => {
 			"moombahton",
 			"trending",
 		];
-		/* Randomize array in-place using Durstenfeld shuffle algorithm (not my code:)) */
 		// randomize the list and then only show the first 12
 		for (var i = baseQueries.length - 1; i > 0; i--) {
 			var j = Math.floor(Math.random() * (i + 1));

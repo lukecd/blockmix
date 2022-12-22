@@ -28,7 +28,7 @@ const Play = () => {
 						className="h-full flex flex-row flex-wrap justify-items-center border bg-primary border-primary border-8 mx-20 mt-5"
 						id="expandedTapeFrame"
 					>
-						<iframe src={showTracksId + "?showTracks=true"} width={910} height={280}></iframe>
+						<iframe src={showTracksId + "?showTracks=true"} width={910} height={220}></iframe>
 					</div>
 				)}
 

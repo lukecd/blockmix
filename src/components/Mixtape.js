@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { WebBundlr } from "@bundlr-network/client";
-import { ethers } from "ethers";
-import { useBalance, useProvider, useSigner } from "wagmi";
+import { useProvider, useSigner } from "wagmi";
 
-const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
+const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 	const [arweaveURL, setArweaveURL] = useState(null);
 	const [playing, setPlaying] = useState(false);
 	const [activeAudioObjects, setActiveAudioObjects] = useState([]);
 	const [playlistTitle, setPlaylistTitle] = useState("");
 	const rainbowKitProvider = useProvider();
-	const { data: signer, isError, isLoading } = useSigner();
+	const { data: signer } = useSigner();
 	const [message, setMessage] = useState("");
+	const [mixtapeURLs, setMixtapeURLs] = useState([]);
+
+	useEffect(() => {
+		// read out a local copy of our mixtape urls store in state
+		const localStorageURLs = localStorage.getItem("mixtape-urls");
+		if (localStorageURLs) {
+			console.log(localStorageURLs.split(","));
+			setMixtapeURLs(localStorageURLs.split(","));
+		} else {
+			console.log("No stored mixtapes");
+			setMixtapeURLs([]);
+		}
+	}, []);
+
+	/**
+	 * Adds the latest playlist URL to the browser's local storage
+	 * @param {*} newURL
+	 */
+	const storePlaylistURL = (newURL) => {
+		setMixtapeURLs([...mixtapeURLs, newURL]);
+		// a new URL has been added. store the whole array in local storage.
+		localStorage.setItem("mixtape-urls", [...mixtapeURLs, newURL]);
+	};
 
 	// On saving to Bundlr, we take the mixtape template and inject the following values
 	// 1. Mixtape title
@@ -22,7 +44,8 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks, storePlaylistURL }) => {
 			return;
 		}
 		// TODO Move the template to Arweave too
-		const templateURL = "/mixtape_design/mixtape_template.html";
+		//const templateURL = "/mixtape_design/mixtape_template.html";
+		const templateURL = "https://arweave.net/lsjOqRmeBq0nP62WlJt3I6K_yD0CiM9-N8TB1Hfh31g";
 
 		// 20 different images to show at the top of the playlist
 		const tapeImages = [

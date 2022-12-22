@@ -4,13 +4,11 @@ import "./index.css";
 import App from "./App";
 
 import "@rainbow-me/rainbowkit/styles.css";
-import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
-const { provider, chains, webSocketProvider } = configureChains([chain.polygonMumbai], [publicProvider()]);
+const { provider, chains } = configureChains([chain.polygonMumbai], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
 	appName: "Blockmix",
