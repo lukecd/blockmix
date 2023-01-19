@@ -45,7 +45,8 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 		}
 		// Template URL for the file stored on Arweave
 		// If you uploaded your own template, change this URL.
-		const templateURL = "https://arweave.net/lsjOqRmeBq0nP62WlJt3I6K_yD0CiM9-N8TB1Hfh31g";
+		const templateURL =
+			"https://arweave.net/lsjOqRmeBq0nP62WlJt3I6K_yD0CiM9-N8TB1Hfh31g";
 
 		// 20 different images to show at the top of the playlist
 		// If you uploaded your own images to Bundlr, change these IDs
@@ -73,7 +74,9 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 		];
 
 		// pick a random image
-		const tapeURL = "https://arweave.net/" + tapeImages[Math.floor(Math.random() * tapeImages.length)];
+		const tapeURL =
+			"https://arweave.net/" +
+			tapeImages[Math.floor(Math.random() * tapeImages.length)];
 
 		// grab the template data
 		const templateDataFull = await fetch(templateURL);
@@ -81,34 +84,57 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 		let templateDataMerged = "";
 		// 1. Change ||TITLE|| to playlistTitle
 		templateDataText =
-			templateDataText.substring(0, templateDataText.indexOf("||TITLE||")) +
+			templateDataText.substring(
+				0,
+				templateDataText.indexOf("||TITLE||"),
+			) +
 			playlistTitle +
-			templateDataText.substring(templateDataText.indexOf("||TITLE||") + 9);
+			templateDataText.substring(
+				templateDataText.indexOf("||TITLE||") + 9,
+			);
 
 		// 1. Change ||IMAGE|| to tapeURL
 		templateDataText =
-			templateDataText.substring(0, templateDataText.indexOf("||IMAGE||")) +
+			templateDataText.substring(
+				0,
+				templateDataText.indexOf("||IMAGE||"),
+			) +
 			tapeURL +
-			templateDataText.substring(templateDataText.indexOf("||IMAGE||") + 9);
+			templateDataText.substring(
+				templateDataText.indexOf("||IMAGE||") + 9,
+			);
 
 		// 3. Change ||TRACKS|| to the stringified value of our JSON array
 		templateDataText =
-			templateDataText.substring(0, templateDataText.indexOf("||TRACKS||")) +
+			templateDataText.substring(
+				0,
+				templateDataText.indexOf("||TRACKS||"),
+			) +
 			JSON.stringify(playlistTracks) +
-			templateDataText.substring(templateDataText.indexOf("||TRACKS||") + 10);
+			templateDataText.substring(
+				templateDataText.indexOf("||TRACKS||") + 10,
+			);
 
 		// use function injection to make the RainbowKit provider work with Bundlr
 		rainbowKitProvider.getSigner = () => signer;
 		// const bundlr = new WebBundlr("https://node1.bundlr.network", "matic", rainbowKitProvider);
-		const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", rainbowKitProvider, {
-			providerUrl: "https://matic-mumbai.chainstacklabs.com",
-		});
+		const bundlr = new WebBundlr(
+			"https://devnet.bundlr.network",
+			"matic",
+			rainbowKitProvider,
+			{
+				providerUrl: "https://matic-mumbai.chainstacklabs.com",
+			},
+		);
 		await bundlr.ready();
 
 		// create a transaction with the merged template data
 		// also set the Content-type value so the browser knows how to render the page
 		const tx = bundlr.createTransaction(templateDataText, {
-			tags: [{ name: "Content-type", value: "text/html" }],
+			tags: [
+				{ name: "Content-type", value: "text/html" },
+				{ name: "App-Name", value: "blockmix" },
+			],
 		});
 
 		// lazy fund the upload, only paying for the amount of data we need
@@ -158,7 +184,7 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 		// create an array of Audio objects we can play
 		const audioObjects = [];
 		for (let i = 0; i < playlistTracks.length; i++) {
-			console.log("creatnig audio object=", playlistTracks[i].playUrl);
+			console.log("creating audio object=", playlistTracks[i].playUrl);
 			const audio = new Audio(playlistTracks[i].playUrl);
 			audioObjects.push(audio);
 		}
@@ -197,7 +223,10 @@ const Mixtape = ({ playlistTracks, setPlaylistTracks }) => {
 					<div className="flex flex-col px-1">
 						<img src={track.artwork} width="150" height="150" />
 						<span className="text-right text-xs font-mono">
-							<a href="#" onClick={(e) => removeFromPlaylist(track.id)}>
+							<a
+								href="#"
+								onClick={(e) => removeFromPlaylist(track.id)}
+							>
 								x
 							</a>
 						</span>
